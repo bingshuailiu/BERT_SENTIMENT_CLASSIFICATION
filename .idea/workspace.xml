@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ea93b691-01ff-4a61-a52e-7b61a2dd5ba7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../情感分析/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../情感分析/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../情感分析/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../情感分析/model/BertSentiment.py" beforeDir="false" afterPath="$PROJECT_DIR$/../情感分析/model/BertSentiment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../情感分析/PTMs调用.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../情感分析/PTMs调用.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,6 +60,7 @@
       <recent name="E:\Jupyter\NLP\情感分析" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\Jupyter\NLP\情感分析\ptms" />
       <recent name="E:\Jupyter\NLP\情感分析\data" />
     </key>
   </component>
@@ -203,7 +203,7 @@
       <workItem from="1658492899871" duration="5224000" />
       <workItem from="1658548076262" duration="2888000" />
       <workItem from="1658580868566" duration="10984000" />
-      <workItem from="1658637240395" duration="234000" />
+      <workItem from="1658637240395" duration="907000" />
     </task>
     <servers />
   </component>
