@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ea93b691-01ff-4a61-a52e-7b61a2dd5ba7" name="Changes" comment="" />
+    <list default="true" id="ea93b691-01ff-4a61-a52e-7b61a2dd5ba7" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../情感分析/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../情感分析/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../情感分析/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../情感分析/model/BertSentiment.py" beforeDir="false" afterPath="$PROJECT_DIR$/../情感分析/model/BertSentiment.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,8 +14,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Jupyter Notebook" />
         <option value="Python Script" />
+        <option value="Jupyter Notebook" />
       </list>
     </option>
   </component>
@@ -25,6 +29,9 @@
         <entry key="FLASK_APP" value="app" />
       </map>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../情感分析" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -195,12 +202,24 @@
       <workItem from="1658385485842" duration="6671000" />
       <workItem from="1658492899871" duration="5224000" />
       <workItem from="1658548076262" duration="2888000" />
-      <workItem from="1658580868566" duration="8970000" />
+      <workItem from="1658580868566" duration="10984000" />
+      <workItem from="1658637240395" duration="234000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/_$test3.coverage" NAME="test3 Coverage Results" MODIFIED="1658390956406" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../情感分析" />
