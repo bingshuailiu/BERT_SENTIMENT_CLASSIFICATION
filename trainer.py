@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 def train():
     # 路径和超参
     TRAIN_DIR = "./data/train_small.csv"
-    BERT_DIR = "./bert"
+    BERT_DIR = "ptms/bert-chinese"
     bs = 1
     max_seq_len = 128
     epoch = 100

@@ -10489,7 +10489,7 @@ rosie
 ##force
 ##ini
 ice
-##bert
+##bert-chinese
 のある
 ##nder
 ##mber

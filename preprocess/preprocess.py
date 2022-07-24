@@ -113,8 +113,8 @@ def convertToFeatures(raw_inputs, labels, max_seq_length, tokenizer):
 # #         cleaned_inputs.append(raw_input)
 #
 # max_seq_len = 512
-# module = BertModel.from_pretrained('../bert')
-# tokenizer = BertTokenizer.from_pretrained('../bert')
+# module = BertModel.from_pretrained('../bert-chinese')
+# tokenizer = BertTokenizer.from_pretrained('../bert-chinese')
 # label_list = processor.get_labels()
 #
 # convertToFeatures(raw_inuts, label_list, max_seq_len, tokenizer)
