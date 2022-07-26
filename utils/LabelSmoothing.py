@@ -32,32 +32,27 @@ def smooth_one_hot(true_labels: torch.Tensor, classes: int, smoothing=0.0):
     """
     assert 0 <= smoothing < 1
     confidence = 1.0 - smoothing
-    label_shape = torch.Size((true_labels.size(0), classes))  # torch.Size([2, 5])
+    label_shape = torch.Size((true_labels.size(0), classes))
     with torch.no_grad():
-        true_dist = torch.empty(size=label_shape, device=true_labels.device)  # 空的，没有初始化
+        true_dist = torch.empty(size=label_shape, device=true_labels.device)
         true_dist.fill_(smoothing / (classes - 1))
-        _, index = torch.max(true_labels, 0)
-        true_dist.scatter_(0, torch.LongTensor(index.unsqueeze(1)), confidence)  # 必须要torch.LongTensor()
+        _, index = torch.max(true_labels, 1)
+        true_dist.scatter_(1, torch.LongTensor(index.unsqueeze(1)), confidence)
     return true_dist
 
 
 def label_to_one_hot(labels, class_size):
     one_hots = []
-    for label in labels:
+    for index, label in enumerate(labels):
         one_hot = torch.zeros(1, class_size, device=labels.device)
-        one_hot[int(label) - 1] = 1
+        one_hot[index, int(label)] = 1
         one_hots.append(one_hot)
-    return torch.tensor(one_hots)
+    return torch.cat(one_hots, dim=0)
 
 
-# one_hots = label_to_one_hot(torch.tensor(1.0), 3)
-# print(one_hots)
-# true_labels = torch.zeros(2, 5)
-# true_labels[0, 1], true_labels[1, 3] = 1, 1
-# print('标签平滑前:\n', true_labels)
-#
-# true_dist = smooth_one_hot(true_labels, classes=5, smoothing=0.1)
-# print('标签平滑后:\n', true_dist)
+# one_hots = label_to_one_hot(torch.tensor([1.0]), 3)
+# smoothed = smooth_one_hot(one_hots, 3, 0.25)
+# print(smoothed)
 
 '''
 Loss = CrossEntropyLoss(NonSparse=True, ...)
