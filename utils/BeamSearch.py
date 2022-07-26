@@ -31,6 +31,6 @@ def beam_search(nodes, topk=1):
     return paths
 
 
-nodes = [{'A': 0.1, 'B': 0.3, 'C': 0.6}, {'A': 0.2, 'B': 0.4, 'C': 0.4}, {'A': 0.6, 'B': 0.2, 'C': 0.2},
-         {'A': 0.3, 'B': 0.3, 'C': 0.4}]
-print(beam_search(nodes, topk=2))
+# nodes = [{'A': 0.1, 'B': 0.3, 'C': 0.6}, {'A': 0.2, 'B': 0.4, 'C': 0.4}, {'A': 0.6, 'B': 0.2, 'C': 0.2},
+#          {'A': 0.3, 'B': 0.3, 'C': 0.4}]
+# print(beam_search(nodes, topk=2))

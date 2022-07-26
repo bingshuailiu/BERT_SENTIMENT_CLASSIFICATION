@@ -75,22 +75,21 @@ class SentimentPreprocessor(DataPreprocessor):
 
 
 def convertToFeatures(raw_inputs, labels, max_seq_length, tokenizer):
-
     label_map = {}
     for (i, label) in enumerate(labels):
         label_map[label] = i
 
     features = []
-    for raw_input in tqdm(raw_inputs):
-        tokens = tokenizer.tokenize(raw_input.text)
-        encode_dict = tokenizer.encode_plus(text=tokens,
-                                            max_seq_length=max_seq_length,
-                                            is_pretokenized=True,
-                                            return_token_type_ids=True,
-                                            return_attention_mask=True)
-        input_ids = encode_dict['input_ids']
-        input_mask = encode_dict['attention_mask']
-        segment_ids = encode_dict['token_type_ids']
+    texts = [ipt.text for ipt in raw_inputs]
+    encode_dict = tokenizer(texts,
+                            padding=True,
+                            truncation=True,
+                            max_length=max_seq_length,
+                            return_tensors='pt')
+    for index, raw_input in tqdm(enumerate(raw_inputs)):
+        input_ids = encode_dict['input_ids'][index]
+        input_mask = encode_dict['attention_mask'][index]
+        segment_ids = encode_dict['token_type_ids'][index]
         feature = SentimentFeatures(input_ids=input_ids,
                                     input_mask=input_mask,
                                     segment_ids=segment_ids,
