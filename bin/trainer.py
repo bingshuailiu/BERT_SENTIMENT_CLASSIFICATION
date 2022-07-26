@@ -9,10 +9,11 @@ from transformers import logging
 from preprocess.preprocess import SentimentPreprocessor, SentimentRawInput, SentimentFeatures, convertToFeatures
 from model.BertSentiment import BertSentimentClassifier
 from preprocess.SentimentDataSet import SentimentDataSet
-from utils.LabelSmoothing import smooth_one_hot
+from utils.LabelSmoothing import smooth_one_hot, label_to_one_hot
 from torch.utils.data import DataLoader
 import logging
 from argparse import ArgumentParser
+import matplotlib.pyplot as plt
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
                     datefmt='%m/%d/%Y %H:%M:%S',
@@ -25,7 +26,7 @@ def getParser():
     parser.add_argument('--train_dir', default="../data/train_small.csv", type=str)
     parser.add_argument('--test_dir', default='../data/test_small.csv', type=str)
     parser.add_argument('--bert_dir', default="../ptms/bert-chinese", type=str)
-    parser.add_argument('--batch_size', default=1, type=int)
+    parser.add_argument('--batch_size', default=2, type=int)
     parser.add_argument('--max_seq_len', default=512, type=int)
     parser.add_argument('--epoch', default=100, type=int)
     parser.add_argument('--use_label_smoothing', default=True, type=bool)
@@ -66,9 +67,9 @@ def train(args):
             output = model(**batch_data)
 
             if args.use_label_smoothing:
-                # smoothed_label = smooth_one_hot(batch_data['label_id'], args.class_size, args.smoothing_rate)
-                # loss = loss_fn(output, smoothed_label)
-                loss = loss_fn(output, batch_data['label_id'])
+                one_hots = label_to_one_hot(batch_data['label_id'], args.class_size, device)
+                smoothed_label = smooth_one_hot(one_hots, args.class_size, args.smoothing_rate)
+                loss = loss_fn(output, smoothed_label.to(device))
             else:
                 loss = loss_fn(output, batch_data['label_id'])
 
@@ -83,7 +84,7 @@ def train(args):
         total_train_acc = total_train_acc / train_data_len
         train_acc_his.append(total_train_acc)
         print(f"训练集准确率：{total_train_acc}")
-    return
+    return train_loss_his, total_train_acc
 
 
 if __name__ == '__main__':
