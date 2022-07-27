@@ -14,7 +14,7 @@ class BertSentimentClassifier(nn.Module):
         out_dim = self.bert_config.hidden_size
         self.classifier = nn.Linear(out_dim, 3)
 
-    def forward(self, input_ids, segment_ids, input_mask, label_id=None):
+    def forward(self, input_ids, segment_ids, input_mask, label_id=None, is_detach=True):
         # 经过BERT输出
         bert_output = self.bert_module(input_ids=input_ids.long(),
                                        attention_mask=input_mask.long(),
@@ -24,8 +24,7 @@ class BertSentimentClassifier(nn.Module):
         seq_out = bert_output[0]
         # pooled_out 用于分类任务
         pooled_out = bert_output[1]
-
-        x = pooled_out.detach()
+        x = pooled_out.detach() if is_detach else pooled_out
         # 经过线性层,输出
         out = self.classifier(x)
         return out
