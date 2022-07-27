@@ -28,7 +28,7 @@ def getParser():
     parser.add_argument('--bert_dir', default="../ptms/bert-chinese", type=str)
     parser.add_argument('--batch_size', default=5, type=int)
     parser.add_argument('--max_seq_len', default=512, type=int)
-    parser.add_argument('--epoch', default=50, type=int)
+    parser.add_argument('--epoch', default=1, type=int)
     parser.add_argument('--use_label_smoothing', default=True, type=bool)
     parser.add_argument('--smoothing_rate', default=0.25, type=float)
     parser.add_argument('--class_size', default=3, type=int)
@@ -80,12 +80,24 @@ def train(args):
             loss.backward()
             optimizer.step()
             step += 1
-            train_loss_his.append(loss.numpy())
+            train_loss_his.append(float(loss))
             bar.set_description("epoch={}\tindex={}\tloss={:.6f}".format(i+1, step, loss))
         total_train_acc = total_train_acc / train_data_len
-        train_acc_his.append(total_train_acc.numpy())
+        train_acc_his.append(float(total_train_acc))
         print(f"训练集准确率：{total_train_acc}")
-    return train_loss_his, total_train_acc
+    return train_loss_his, train_acc_his
+
+
+def draw(save_path, data1, data2, label1, label2, title, x, y):
+    plt.figure(figsize=(10, 6), dpi=200)
+    size = [i for i in range(len(data1))]
+    plt.plot(size, data1, color='red', lw=2, label=label1)
+    plt.plot(size, data2, color='blue', lw=2, label=label2)
+    plt.xlabel(x, fontsize=15)
+    plt.ylabel(y, fontsize=15)
+    plt.legend([label1, label2], fontsize=12.5)
+    plt.title(title)
+    plt.savefig(save_path+'.png')
 
 
 def train_plot():
@@ -94,48 +106,52 @@ def train_plot():
     simple_loss, simple_acc = train(args)
     args.is_detach = True
     ls_loss, ls_acc = train(args)
-    plt.figure(figsize=(10, 6), dpi=200)
-    size = [i for i in range(len(simple_loss))]
-    plt.plot(size, simple_loss, color='red', lw=2, label="Simple")
-    plt.plot(size, ls_loss, color='blue', lw=2, label="Use Detach")
-    plt.xlabel("Step", fontsize=15)
-    plt.ylabel("Loss", fontsize=15)
-    plt.legend(['Simple', 'Use Detach'], fontsize=12.5)
-    plt.title('Loss of use detach and simple')
-    plt.savefig('detach_loss.png')
-    plt.figure(figsize=(10, 6), dpi=200)
-    size = [i for i in range(len(ls_acc))]
-    plt.plot(size, simple_acc, color='red', lw=2, label="Simple")
-    plt.plot(size, ls_acc, color='blue', lw=2, label="Use Detach")
-    plt.xlabel("Epoch", fontsize=15)
-    plt.ylabel("Acc", fontsize=15)
-    plt.legend(['Simple', 'Label Smoothing'], fontsize=12.5)
-    plt.title('Acc of use detach and simple')
-    plt.savefig('detach_acc.png')
+    draw(
+        save_path='../results/detach_loss',
+        data1=simple_loss,
+        data2=ls_loss,
+        label1="Simple",
+        label2="Use Detach",
+        title="Loss of use detach and simple",
+        x="Step",
+        y="Loss"
+    )
+    draw(
+        save_path='../results/detach_acc',
+        data1=simple_acc,
+        data2=ls_acc,
+        label1="Simple",
+        label2="Use Detach",
+        title="Acc of use detach and simple",
+        x="Epoch",
+        y="Acc"
+    )
 
     args.use_label_smoothing = False
     simple_loss, simple_acc = train(args)
     args.use_label_smoothing = True
     ls_loss, ls_acc = train(args)
 
-    plt.figure(figsize=(10, 6), dpi=200)
-    size = [i for i in range(len(simple_loss))]
-    plt.plot(size, simple_loss, color='red', lw=2, label="Simple")
-    plt.plot(size, ls_loss, color='blue', lw=2, label="Label Smoothing")
-    plt.xlabel("Step", fontsize=15)
-    plt.ylabel("Loss", fontsize=15)
-    plt.legend(['Simple', 'Label Smoothing'], fontsize=12.5)
-    plt.title('Loss of label smoothing and simple')
-    plt.savefig('loss.png')
-    plt.figure(figsize=(10, 6), dpi=200)
-    size = [i for i in range(len(ls_acc))]
-    plt.plot(size, simple_acc, color='red', lw=2, label="Simple")
-    plt.plot(size, ls_acc, color='blue', lw=2, label="Label Smoothing")
-    plt.xlabel("Epoch", fontsize=15)
-    plt.ylabel("Acc", fontsize=15)
-    plt.legend(['Simple', 'Label Smoothing'], fontsize=12.5)
-    plt.title('Acc of label smoothing and simple')
-    plt.savefig('acc.png')
+    draw(
+        save_path='../results/ls_loss',
+        data1=simple_loss,
+        data2=ls_loss,
+        label1="Simple",
+        label2="Label Smoothing",
+        title="Loss of label smoothing and simple",
+        x="Step",
+        y="Loss"
+    )
+    draw(
+        save_path='../results/ls_acc',
+        data1=simple_acc,
+        data2=ls_acc,
+        label1="Simple",
+        label2="Label Smoothing",
+        title="Acc of label smoothing and simple",
+        x="Epoch",
+        y="Acc"
+    )
 
 
 if __name__ == '__main__':
