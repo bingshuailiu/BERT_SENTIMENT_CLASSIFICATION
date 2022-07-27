@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="6dd925b1-45eb-4d1d-bc82-0e0a43b99e72" name="XMU-NLP-32">
+        <fileTransfer rootFolder="/home/sada/liubingshuai" accessType="SFTP" host="59.77.7.32" port="2222" sshConfigId="2367eb13-13eb-473d-af12-dd92a6527b72" sshConfig="liubingshuai@59.77.7.32:2222 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

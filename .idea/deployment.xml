@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" serverName="XMU-NLP-32" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
-      <paths name="lbs@59.77.13.131:40662 password">
+      <paths name="XMU-NLP-32">
         <serverdata>
           <mappings>
-            <mapping local="$PROJECT_DIR$/../情感分析" web="/" />
+            <mapping deploy="/NLP" local="$PROJECT_DIR$/.." />
           </mappings>
         </serverdata>
       </paths>

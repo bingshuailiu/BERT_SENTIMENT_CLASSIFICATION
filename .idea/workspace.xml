@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ea93b691-01ff-4a61-a52e-7b61a2dd5ba7" name="Changes" comment="train and plot">
-      <change afterPath="$PROJECT_DIR$/../情感分析/bin/loss.png" afterDir="false" />
+    <list default="true" id="ea93b691-01ff-4a61-a52e-7b61a2dd5ba7" name="Changes" comment="optimized drawing">
+      <change afterPath="$PROJECT_DIR$/../情感分析/.idea/sshConfigs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../情感分析/.idea/webServers.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../情感分析/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../情感分析/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../情感分析/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../情感分析/.idea/deployment.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../情感分析/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../情感分析/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../情感分析/bin/trainer.py" beforeDir="false" afterPath="$PROJECT_DIR$/../情感分析/bin/trainer.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -216,7 +218,7 @@
       <workItem from="1658640547908" duration="4508000" />
       <workItem from="1658733670751" duration="1270000" />
       <workItem from="1658764516581" duration="19303000" />
-      <workItem from="1658893676043" duration="1251000" />
+      <workItem from="1658893676043" duration="2311000" />
     </task>
     <task id="LOCAL-00001" summary="completed label smoothing">
       <created>1658842557183</created>
@@ -239,7 +241,14 @@
       <option name="project" value="LOCAL" />
       <updated>1658884281105</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="optimized drawing">
+      <created>1658894971203</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1658894971203</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -260,7 +269,8 @@
     <MESSAGE value="completed label smoothing" />
     <MESSAGE value="completed label smoothing train" />
     <MESSAGE value="train and plot" />
-    <option name="LAST_COMMIT_MESSAGE" value="train and plot" />
+    <MESSAGE value="optimized drawing" />
+    <option name="LAST_COMMIT_MESSAGE" value="optimized drawing" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
