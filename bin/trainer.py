@@ -33,6 +33,8 @@ def getParser():
     parser.add_argument('--smoothing_rate', default=0.25, type=float)
     parser.add_argument('--class_size', default=3, type=int)
     parser.add_argument('--is_detach', default=True, type=bool)
+    parser.add_argument('--teacher_model', default="../ptms/bert-chinese", type=str)
+    parser.add_argument('--student_model', default="../ptms/tiny-bert", type=str)
     return parser.parse_args()
 
 
