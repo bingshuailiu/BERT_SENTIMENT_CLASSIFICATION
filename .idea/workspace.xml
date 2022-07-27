@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ea93b691-01ff-4a61-a52e-7b61a2dd5ba7" name="Changes" comment="optimized drawing">
-      <change afterPath="$PROJECT_DIR$/../情感分析/.idea/sshConfigs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../情感分析/.idea/webServers.xml" afterDir="false" />
+    <list default="true" id="ea93b691-01ff-4a61-a52e-7b61a2dd5ba7" name="Changes" comment="new ignore">
       <change beforePath="$PROJECT_DIR$/../情感分析/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../情感分析/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../情感分析/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../情感分析/.idea/deployment.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../情感分析/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../情感分析/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -218,7 +214,7 @@
       <workItem from="1658640547908" duration="4508000" />
       <workItem from="1658733670751" duration="1270000" />
       <workItem from="1658764516581" duration="19303000" />
-      <workItem from="1658893676043" duration="2311000" />
+      <workItem from="1658893676043" duration="2508000" />
     </task>
     <task id="LOCAL-00001" summary="completed label smoothing">
       <created>1658842557183</created>
@@ -248,7 +244,21 @@
       <option name="project" value="LOCAL" />
       <updated>1658894971203</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="new ignore">
+      <created>1658898107251</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1658898107251</updated>
+    </task>
+    <task id="LOCAL-00006" summary="new ignore">
+      <created>1658898139090</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1658898139090</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -270,7 +280,8 @@
     <MESSAGE value="completed label smoothing train" />
     <MESSAGE value="train and plot" />
     <MESSAGE value="optimized drawing" />
-    <option name="LAST_COMMIT_MESSAGE" value="optimized drawing" />
+    <MESSAGE value="new ignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="new ignore" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
