@@ -15,6 +15,8 @@ import logging
 from argparse import ArgumentParser
 import matplotlib.pyplot as plt
 from model import TinyBert
+from bert_transformer import BertAdam
+from torch.nn import MSELoss, CrossEntropyLoss
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
                     datefmt='%m/%d/%Y %H:%M:%S',
@@ -37,6 +39,8 @@ def getParser():
     parser.add_argument('--teacher_model', default="../ptms/bert-chinese", type=str)
     parser.add_argument('--student_model', default="../ptms/tiny-bert", type=str)
     parser.add_argument('--pred_distill', default=True, type=bool)
+    parser.add_argument('--learning_rate', default=5e-5, type=float)
+    parser.add_argument('--T', default=1.0, type=float)
     return parser.parse_args()
 
 
@@ -160,7 +164,6 @@ def train_plot():
 
 def distilling(args):
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-
     tokenizer = BertTokenizer.from_pretrained(args.student_model)
     # 准备训练数据
     processor = SentimentPreprocessor()
@@ -171,14 +174,64 @@ def distilling(args):
     train_dataset = SentimentDataSet(train_features, 'train', device)
     train_dataloader = DataLoader(dataset=train_dataset, batch_size=args.batch_size, shuffle=True)
 
+    train_steps = int(
+        len(train_features)/args.batch_size*args.epoch
+    )
     logger.info("***** Running training *****")
     logger.info("  Num examples = %d", len(train_features))
     logger.info("  Batch size = %d", args.batch_size)
     logger.info("  Num steps = %d", len(train_features)*args.epoch)
 
-    if not args.pred_distill:
-        teacher_model = TinyBert.from_pretrained(args.teacher_model)
-    student_model = TinyBert.from_pretrained(args.student_model)
+    if not args.do_eval:
+        teacher_model = TinyBertForSequenceClassification.from_pretrained(args.teacher_model)
+    student_model = TinyBertForSequenceClassification.from_pretrained(args.student_model)
+    if not args.do_eval:
+        param_optimizer = list(student_model.named_parameters())
+        size = 0
+        for n, p in student_model.named_parameters():
+            logger.info('n: {}'.format(n))
+            size += p.element()
+        logger.info('Total parameters: {}'.format(size))
+        no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
+        optimizer_grouped_parameters = [
+            {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},
+            {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}
+        ]
+        optimizer = BertAdam(optimizer_grouped_parameters,
+                             schedule='none',
+                             lr=args.learning_rate,
+                             warmup=args.warmup_proportion,
+                             t_total=train_steps
+        )
+        loss_mse = MSELoss()
+
+        step = 0
+        for i in range(args.epoch):
+            print(f"---------epoch {i + 1}---------")
+            total_train_acc = 0.0
+            bar = tqdm(train_dataloader, total=len(train_dataloader))
+            for step, batch_data in enumerate(bar):
+                student_model_output = student_model(**batch_data, is_student=True)
+                student_logits = student_model_output[0]
+                student_attention_output = student_model_output[1]
+                student_sequence_output = student_model_output[2]
+                with torch.no_grad():
+                    teacher_model_output = teacher_model(**batch_data, is_student=False)
+                    teacher_logits = teacher_model_output[0]
+                    teacher_attention_output = teacher_model_output[1]
+                    teacher_sequence_output = teacher_model_output[2]
+                if not args.pred_distill:
+                    # 蒸馏transformer部分 需要计算的loss分为两部分
+                    # 1. attention部分的loss
+                    # 2. hidden_state部分的loss
+                    return
+                else:
+                    # 蒸馏分类器的部分 使用交叉熵计算loss
+                    # cross_entropy(student_logits / T, teacher_logits / T)
+                    # 经过论文作者的实验, T最好的值是1.....
+                    cls_loss = CrossEntropyLoss(student_logits/args.T, teacher_logits/args.T)
+                    return
+                # bar.set_description("epoch={}\tindex={}\tloss={:.6f}".format(i + 1, step, loss))
 
     return
 
