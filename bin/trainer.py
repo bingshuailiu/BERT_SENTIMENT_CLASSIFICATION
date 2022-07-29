@@ -177,11 +177,13 @@ def distilling(args):
     logger.info("  Num steps = %d", len(train_features)*args.epoch)
 
     if not args.pred_distill:
-
-    student_model = TinyBert.from_pretrained()
+        teacher_model = TinyBert.from_pretrained(args.teacher_model)
+    student_model = TinyBert.from_pretrained(args.student_model)
 
     return
 
 
 if __name__ == '__main__':
-    distilling(getParser())
+    args = getParser()
+    student_model = TinyBert.from_pretrained(args.student_model)
+    student_model.to(torch.device("cuda:0"))

@@ -37,10 +37,10 @@ from torch.nn import CrossEntropyLoss, MSELoss
 from scipy.stats import pearsonr, spearmanr
 from sklearn.metrics import matthews_corrcoef, f1_score
 
-from transformer.modeling import TinyBertForSequenceClassification
-from transformer.tokenization import BertTokenizer
-from transformer.optimization import BertAdam
-from transformer.file_utils import WEIGHTS_NAME, CONFIG_NAME
+from bert_transformer.modeling import TinyBertForSequenceClassification
+from bert_transformer.tokenization import BertTokenizer
+from bert_transformer.optimization import BertAdam
+from bert_transformer.file_utils import WEIGHTS_NAME, CONFIG_NAME
 
 csv.field_size_limit(sys.maxsize)
 
