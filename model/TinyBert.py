@@ -7,7 +7,7 @@ import json
 import os
 import copy
 import logging
-from bert_transformer.modeling import BertPreTrainedModel, BertModel
+from bert_transformer import BertPreTrainedModel, BertModel
 
 
 class TinyBert(BertPreTrainedModel):

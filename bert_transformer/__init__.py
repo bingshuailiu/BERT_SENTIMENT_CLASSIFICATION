@@ -2,7 +2,7 @@ __version__ = "0.6.2"
 from .tokenization import BertTokenizer, BasicTokenizer, WordpieceTokenizer
 
 
-from .modeling import (BertConfig, BertModel, BertForPreTraining,
+from .modeling import (BertConfig, BertModel, BertForPreTraining, BertPreTrainedModel,
                        BertForMaskedLM, BertForNextSentencePrediction,
                        TinyBertForSequenceClassification,
                        load_tf_weights_in_bert)

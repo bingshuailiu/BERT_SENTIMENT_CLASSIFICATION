@@ -185,5 +185,7 @@ def distilling(args):
 
 if __name__ == '__main__':
     args = getParser()
-    student_model = TinyBert.from_pretrained(args.student_model)
+    from bert_transformer.modeling import TinyBertForSequenceClassification
+    student_model = TinyBertForSequenceClassification.from_pretrained(args.student_model, 3)
+    # student_model = TinyBert.from_pretrained(args.student_model)
     student_model.to(torch.device("cuda:0"))
