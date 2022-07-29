@@ -14,6 +14,7 @@ from torch.utils.data import DataLoader
 import logging
 from argparse import ArgumentParser
 import matplotlib.pyplot as plt
+from model import TinyBert
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
                     datefmt='%m/%d/%Y %H:%M:%S',
@@ -35,6 +36,7 @@ def getParser():
     parser.add_argument('--is_detach', default=True, type=bool)
     parser.add_argument('--teacher_model', default="../ptms/bert-chinese", type=str)
     parser.add_argument('--student_model', default="../ptms/tiny-bert", type=str)
+    parser.add_argument('--pred_distill', default=True, type=bool)
     return parser.parse_args()
 
 
@@ -83,7 +85,7 @@ def train(args):
             optimizer.step()
             step += 1
             train_loss_his.append(float(loss))
-            bar.set_description("epoch={}\tindex={}\tloss={:.6f}".format(i+1, step, loss))
+            bar.set_description("epoch={}\tindex={}\tloss={:.6f}".format(i + 1, step, loss))
         total_train_acc = total_train_acc / train_data_len
         train_acc_his.append(float(total_train_acc))
         print(f"训练集准确率：{total_train_acc}")
@@ -99,7 +101,7 @@ def draw(save_path, data1, data2, label1, label2, title, x, y):
     plt.ylabel(y, fontsize=15)
     plt.legend([label1, label2], fontsize=12.5)
     plt.title(title)
-    plt.savefig(save_path+'.png')
+    plt.savefig(save_path + '.png')
 
 
 def train_plot():
@@ -156,5 +158,30 @@ def train_plot():
     )
 
 
+def distilling(args):
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+    tokenizer = BertTokenizer.from_pretrained(args.student_model)
+    # 准备训练数据
+    processor = SentimentPreprocessor()
+    train_inputs = processor.get_train_examples(args.train_dir)
+
+    label_list = processor.get_labels()
+    train_features = convertToFeatures(train_inputs, label_list, args.max_seq_len, tokenizer)
+    train_dataset = SentimentDataSet(train_features, 'train', device)
+    train_dataloader = DataLoader(dataset=train_dataset, batch_size=args.batch_size, shuffle=True)
+
+    logger.info("***** Running training *****")
+    logger.info("  Num examples = %d", len(train_features))
+    logger.info("  Batch size = %d", args.batch_size)
+    logger.info("  Num steps = %d", len(train_features)*args.epoch)
+
+    if not args.pred_distill:
+
+    student_model = TinyBert.from_pretrained()
+
+    return
+
+
 if __name__ == '__main__':
-    train_plot()
+    distilling(getParser())
