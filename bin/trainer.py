@@ -175,12 +175,12 @@ def distilling(args):
     train_dataloader = DataLoader(dataset=train_dataset, batch_size=args.batch_size, shuffle=True)
 
     train_steps = int(
-        len(train_features)/args.batch_size*args.epoch
+        len(train_features) / args.batch_size * args.epoch
     )
     logger.info("***** Running training *****")
     logger.info("  Num examples = %d", len(train_features))
     logger.info("  Batch size = %d", args.batch_size)
-    logger.info("  Num steps = %d", len(train_features)*args.epoch)
+    logger.info("  Num steps = %d", len(train_features) * args.epoch)
 
     if not args.do_eval:
         teacher_model = TinyBertForSequenceClassification.from_pretrained(args.teacher_model)
@@ -202,35 +202,74 @@ def distilling(args):
                              lr=args.learning_rate,
                              warmup=args.warmup_proportion,
                              t_total=train_steps
-        )
+                             )
         loss_mse = MSELoss()
-
-        step = 0
+        global_step = 0
         for i in range(args.epoch):
             print(f"---------epoch {i + 1}---------")
-            total_train_acc = 0.0
+            tr_loss = 0.0
+            tr_attention_loss = 0.0
+            tr_hidden_state_loss = 0.0
+            tr_cls_loss = 0.0
             bar = tqdm(train_dataloader, total=len(train_dataloader))
             for step, batch_data in enumerate(bar):
+                attention_loss = 0.0
+                hidden_state_loss = 0.0
+                cls_loss = 0.0
+
+                # 学生模型的输出
                 student_model_output = student_model(**batch_data, is_student=True)
                 student_logits = student_model_output[0]
                 student_attention_output = student_model_output[1]
                 student_sequence_output = student_model_output[2]
+                # 老师模型的输出
                 with torch.no_grad():
                     teacher_model_output = teacher_model(**batch_data, is_student=False)
                     teacher_logits = teacher_model_output[0]
                     teacher_attention_output = teacher_model_output[1]
                     teacher_sequence_output = teacher_model_output[2]
+                # 两种情况计算Loss
                 if not args.pred_distill:
                     # 蒸馏transformer部分 需要计算的loss分为两部分
                     # 1. attention部分的loss
                     # 2. hidden_state部分的loss
-                    return
+                    student_layer_num = len(student_attention_output)
+                    teacher_layer_num = len(teacher_attention_output)
+                    # 这里是映射函数的实现, 映射的方式可以随意定义, 论文里的实现如下:
+                    # g(m) = 3 * m 即每三层选取一层
+                    assert len(teacher_layer_num) / len(student_layer_num) >= 3
+                    new_teacher_attention = []
+                    new_teacher_sequence = []
+                    for i in range(student_layer_num):
+                        new_teacher_attention.append(teacher_attention_output[i*3])
+                        new_teacher_sequence.append(teacher_sequence_output[i*3])
+                    for student_attention, teacher_attention in zip(student_attention_output, new_teacher_attention):
+                        attention_loss += MSELoss(student_attention, teacher_attention)
+                    for student_sequence, teacher_sequence in zip(student_sequence_output, new_teacher_sequence):
+                        hidden_state_loss += MSELoss(student_sequence, teacher_sequence)
+                    loss = hidden_state_loss + attention_loss
+                    tr_attention_loss += attention_loss.item()
+                    tr_hidden_state_loss += hidden_state_loss.item()
                 else:
                     # 蒸馏分类器的部分 使用交叉熵计算loss
                     # cross_entropy(student_logits / T, teacher_logits / T)
                     # 经过论文作者的实验, T最好的值是1.....
-                    cls_loss = CrossEntropyLoss(student_logits/args.T, teacher_logits/args.T)
-                    return
+                    cls_loss = CrossEntropyLoss(student_logits / args.T, teacher_logits / args.T)
+                    loss = cls_loss
+                    tr_cls_loss += cls_loss.item()
+                loss.backward()
+                tr_loss += loss.item()
+
+                optimizer.step()
+                optimizer.zero_grad()
+                global_step += 1
+
+                if(global_step + 1) % args.eval_step == 0:
+                    # 评估模型部分
+                    student_model.eval()
+                    loss = tr_loss / (step + 1)
+
+                    continue
                 # bar.set_description("epoch={}\tindex={}\tloss={:.6f}".format(i + 1, step, loss))
 
     return
@@ -239,6 +278,7 @@ def distilling(args):
 if __name__ == '__main__':
     args = getParser()
     from bert_transformer.modeling import TinyBertForSequenceClassification
+
     student_model = TinyBertForSequenceClassification.from_pretrained(args.student_model, 3)
     # student_model = TinyBert.from_pretrained(args.student_model)
     student_model.to(torch.device("cuda:0"))
